@@ -56,13 +56,17 @@
     <p><a class="more" href="mailto:contact@edencorporatemobility.com">contact@edencorporatemobility.com</a></p>
     <p class="muted">Vous êtes propriétaire d'un logement ? Utilisez le même formulaire et décrivez-le.</p>
   </div>
-  <form class="contact-form" method="post" action="/contact.php" id="contact-form" novalidate>
+  <form class="contact-form" method="post" action="https://formsubmit.co/contact@edencorporatemobility.com" id="contact-form" novalidate>
     <h2 class="h3">Ou décrivez votre besoin</h2>
     <p class="muted">Dates, nombre de personnes, lieu de mission, budget : nous vous rappelons.</p>
     <div class="form-ok" id="form-ok" hidden>Merci, votre demande est bien envoyée. Nous vous rappelons rapidement.</div>
     <div class="form-grid"><div class="field"><label for="f-name">Nom et prénom <span class="req" aria-hidden="true">*</span></label><input id="f-name" name="name" type="text" required autocomplete="name"></div><div class="field"><label for="f-company">Entreprise <span class="req" aria-hidden="true">*</span></label><input id="f-company" name="company" type="text" required autocomplete="organization"></div><div class="field"><label for="f-role">Fonction</label><input id="f-role" name="role" type="text" autocomplete="organization-title"></div><div class="field"><label for="f-email">Email <span class="req" aria-hidden="true">*</span></label><input id="f-email" name="email" type="email" required autocomplete="email"></div><div class="field"><label for="f-phone">Téléphone</label><input id="f-phone" name="phone" type="tel" autocomplete="tel"></div><div class="field wide"><label for="f-message">Votre besoin (dates, personnes, lieu, budget) <span class="req" aria-hidden="true">*</span></label><textarea id="f-message" name="message" rows="5" required></textarea></div></div>
-    <div class="hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
-    <input type="hidden" name="lang" value="fr">
+    <div class="hp" aria-hidden="true"><label>Website<input type="text" name="_honey" tabindex="-1" autocomplete="off"></label></div>
+    <input type="hidden" name="_subject" value="[Site web] Nouvelle demande de contact">
+    <input type="hidden" name="_next" value="https://edencorporatemobility.com/contact/?sent=1">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="Langue" value="fr">
     <p class="muted small">Vos données servent uniquement à traiter votre demande. <a href="/politique-de-confidentialite/">Politique de confidentialité</a>.</p>
     <button class="btn btn-primary" type="submit">Envoyer ma demande</button>
   </form>

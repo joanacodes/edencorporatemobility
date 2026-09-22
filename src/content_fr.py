@@ -335,7 +335,7 @@ PAGES = [
          "form": {"heading": "Ou décrivez votre besoin", "intro": "Dates, nombre de personnes, lieu de mission, budget : nous vous rappelons.",
                   "success": "Merci, votre demande est bien envoyée. Nous vous rappelons rapidement.",
                   "privacy": "Vos données servent uniquement à traiter votre demande. <a href=\"/politique-de-confidentialite/\">Politique de confidentialité</a>.",
-                  "submit": "Envoyer ma demande",
+                  "submit": "Envoyer ma demande", "subject": "[Site web] Nouvelle demande de contact",
                   "fields": [
                       {"name": "name", "label": "Nom et prénom", "type": "text", "req": True, "ac": "name"},
                       {"name": "company", "label": "Entreprise", "type": "text", "req": True, "ac": "organization"},
@@ -419,7 +419,7 @@ PAGES = [
 <h2>3. Finalités et bases légales</h2>
 <p>Répondre à vos demandes et établir des devis (mesures précontractuelles) ; exécuter et facturer les prestations (exécution du contrat) ; respecter nos obligations comptables et fiscales (obligation légale) ; entretenir la relation commerciale avec nos clients professionnels et vous informer de nos services (intérêt légitime, avec possibilité de vous y opposer à tout moment) ; mesurer l'audience du site (consentement).</p>
 <h2>4. Destinataires</h2>
-<p>Vos données sont traitées par l'équipe d'Eden et, dans la mesure nécessaire à l'exécution des prestations, transmises aux prestataires concernés (propriétaires et exploitants d'hébergements, transporteurs, prestataires de services), ainsi qu'à nos sous-traitants techniques (hébergement du site, messagerie, outils de gestion et de facturation). Nous ne vendons pas vos données.</p>
+<p>Vos données sont traitées par l'équipe d'Eden et, dans la mesure nécessaire à l'exécution des prestations, transmises aux prestataires concernés (propriétaires et exploitants d'hébergements, transporteurs, prestataires de services), ainsi qu'à nos sous-traitants techniques (hébergement du site, acheminement du formulaire de contact par FormSubmit, messagerie, outils de gestion et de facturation). Nous ne vendons pas vos données.</p>
 <h2>5. Transferts hors Union européenne</h2>
 <p>Nos données sont hébergées dans l'Union européenne. Si l'un de nos outils implique un transfert hors UE, il est encadré par des garanties appropriées (clauses contractuelles types de la Commission européenne ou décision d'adéquation).</p>
 <h2>6. Durées de conservation</h2>

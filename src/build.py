@@ -22,6 +22,7 @@ SITE = {
     "phone_tel": "+33184161806",
     "whatsapp": "",                                     # ex. "33612345678" (sans +). Vide = bouton masqué.
     "email": "contact@edencorporatemobility.com",       # À CONFIRMER
+    "form_endpoint": "https://formsubmit.co/contact@edencorporatemobility.com",  # FormSubmit : même email ; après activation, remplacer par l'alias https://formsubmit.co/el/xxxx
     "hours_fr": "Lundi–vendredi, 9h–18h (heure de Paris)",   # À CONFIRMER
     "hours_en": "Monday–Friday, 9am–6pm (Paris time, CET)",  # À CONFIRMER
     "address_lines": ["[Adresse du siège]", "75000 Paris, France"],   # À COMPLÉTER
@@ -187,13 +188,17 @@ def r_contact(sec, lang, page):
     <p><a class="more" href="mailto:{SITE["email"]}">{SITE["email"]}</a></p>
     {sec.get("aside","")}
   </div>
-  <form class="contact-form" method="post" action="/contact.php" id="contact-form" novalidate>
+  <form class="contact-form" method="post" action="{SITE["form_endpoint"]}" id="contact-form" novalidate>
     <h2 class="h3">{f["heading"]}</h2>
     <p class="muted">{f["intro"]}</p>
     <div class="form-ok" id="form-ok" hidden>{f["success"]}</div>
     <div class="form-grid">{fields}</div>
-    <div class="hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
-    <input type="hidden" name="lang" value="{lang}">
+    <div class="hp" aria-hidden="true"><label>Website<input type="text" name="_honey" tabindex="-1" autocomplete="off"></label></div>
+    <input type="hidden" name="_subject" value="{f["subject"]}">
+    <input type="hidden" name="_next" value="{abs_url(lang, page["slug"])}?sent=1">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="Langue" value="{lang}">
     <p class="muted small">{f["privacy"]}</p>
     <button class="btn btn-primary" type="submit">{f["submit"]}</button>
   </form>
@@ -443,7 +448,6 @@ def sitemap():
 
 ROBOTS = """User-agent: *
 Allow: /
-Disallow: /contact.php
 Sitemap: {url}/sitemap.xml
 """
 
@@ -495,7 +499,7 @@ def build():
         shutil.rmtree(DIST)
     DIST.mkdir(parents=True)
     shutil.copytree(ROOT / "assets", DIST / "assets")
-    for extra in ["favicon.svg", "contact.php", "404.html", "README.md"]:
+    for extra in ["favicon.svg", "404.html", "README.md"]:
         src = ROOT / extra
         if src.exists():
             shutil.copy(src, DIST / extra)
