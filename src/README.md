@@ -1,6 +1,6 @@
 # Eden Corporate Mobility — nouveau site (FR / EN)
 
-Site statique bilingue, 34 pages, prêt pour Hostinger. Aucune dépendance et aucun code serveur : HTML, CSS, JS. Le formulaire de contact passe par FormSubmit (service gratuit, sans compte).
+Site statique bilingue, 34 pages, prêt pour Hostinger. Aucune dépendance : HTML, CSS, JS, un fichier PHP pour le formulaire.
 
 ## 1. Contenu du livrable
 
@@ -9,6 +9,7 @@ dist/              ← À TÉLÉVERSER TEL QUEL dans public_html (Hostinger)
   index.html       ← accueil FR ; /en/ = accueil EN
   logement/ transports/ services-bien-etre/ pour-qui/ …   (FR)
   en/housing/ en/transport/ en/wellbeing-services/ …       (EN)
+  contact.php      ← traitement du formulaire (mettre l'adresse email de réception)
   sitemap.xml  robots.txt  .htaccess  404.html  favicon.svg
   assets/          ← style.css, main.js, polices auto-hébergées (RGPD), og-image.png
 src/               ← générateur (Python 3) : build.py + content_fr.py + content_en.py
@@ -20,7 +21,7 @@ Pour modifier le site : éditer `src/content_fr.py` / `src/content_en.py` (texte
 
 | Élément | Où | Statut |
 |---|---|---|
-| Email de contact | `SITE.email` et `SITE.form_endpoint` (FormSubmit) | à confirmer |
+| Email de contact | `SITE.email` + `dist/contact.php` (`$to`, `$from`) | à confirmer |
 | Horaires d'appel FR/EN | `SITE.hours_fr`, `SITE.hours_en` | à confirmer |
 | Adresse du siège | `SITE.address_lines` | à compléter |
 | WhatsApp (recommandé pour les clients étrangers) | `SITE.whatsapp` (ex. `33612345678`) | vide = bouton masqué |
@@ -45,7 +46,7 @@ Le copywriting est spécifique, donc engageant. Ces points sont formulés à par
 ## 4. Déploiement Hostinger
 
 1. hPanel → Gestionnaire de fichiers → `public_html` : supprimer l'ancien contenu, téléverser **le contenu** de `dist/` (y compris `.htaccess`, fichier caché).
-2. Activer le formulaire : ouvrir `/contact/` sur le site en ligne, envoyer un premier test. FormSubmit envoie alors un email d'activation à l'adresse de réception : cliquer sur le lien, une seule fois. Les demandes suivantes arrivent directement dans la boîte mail (l'expéditeur est en Reply-To). Facultatif : FormSubmit fournit ensuite un alias `https://formsubmit.co/el/…` à mettre dans `SITE.form_endpoint` pour ne pas exposer l'email dans le code. Si du spam arrive, supprimer la ligne `_captcha` dans `build.py` pour réactiver le captcha de FormSubmit.
+2. Vérifier que PHP est activé (version 8.x) ; ouvrir `/contact/`, envoyer un test, vérifier la réception. Si l'email n'arrive pas : créer l'adresse `no-reply@…` dans Hostinger Emails, ou remplacer l'action du formulaire par un service type Formspree.
 3. SSL : activer le certificat (hPanel → Sécurité → SSL). `.htaccess` force déjà HTTPS.
 4. Si le domaine actuel est sur Squarespace : pointer le DNS vers Hostinger, puis ajouter des redirections 301 des anciennes URL vers les nouvelles dans `.htaccess` (`Redirect 301 /ancienne-page /logement/`). Lister les anciennes URL avant de couper Squarespace.
 
