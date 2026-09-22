@@ -1,3 +1,2 @@
-dist/
-src/__pycache__/
+_generator/__pycache__/
 .DS_Store

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Eden Corporate Mobility — générateur de site statique (FR / EN).
-Usage : python3 build.py   →  dossier ../dist prêt à téléverser sur Hostinger (public_html).
+Usage : py build.py   →  régénère le site à la racine du dépôt (le dossier parent). GitHub Pages sert cette racine telle quelle.
 
 Toutes les informations "à confirmer" sont centralisées dans SITE ci-dessous.
 """
@@ -10,7 +10,7 @@ from pathlib import Path
 import content_fr, content_en, images
 
 ROOT = Path(__file__).resolve().parent
-DIST = ROOT.parent / "dist"
+DIST = ROOT.parent   # racine du dépôt
 
 # ─────────────────────────────────────────────────────────────────────────────
 # CONFIGURATION — À COMPLÉTER / CONFIRMER
@@ -536,12 +536,24 @@ Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
 </IfModule>
 """
 
+GENERATED_FILES = ["sitemap.xml", "robots.txt", "favicon.svg", "404.html", "README.md", "CNAME", ".nojekyll"]
+
 def build():
-    if DIST.exists():
-        shutil.rmtree(DIST)
-    DIST.mkdir(parents=True)
+    # Nettoyage prudent : on ne supprime que ce que le générateur produit (jamais .git, _generator, blog, .github…)
+    for lang, cfg in LANGS.items():
+        for p in cfg["pages"]:
+            folder = DIST / cfg["prefix"] / p["slug"] if p["slug"] else DIST / cfg["prefix"]
+            if p["slug"] and folder.is_dir():
+                shutil.rmtree(folder)
+    if (DIST / "en").is_dir():
+        shutil.rmtree(DIST / "en")
+    if (DIST / "assets").is_dir():
+        shutil.rmtree(DIST / "assets")
+    for name in GENERATED_FILES + ["index.html", ".htaccess"]:
+        if (DIST / name).exists():
+            (DIST / name).unlink()
     shutil.copytree(ROOT / "assets", DIST / "assets")
-    for extra in ["favicon.svg", "404.html", "README.md", "CNAME", ".nojekyll"]:
+    for extra in GENERATED_FILES:
         src = ROOT / extra
         if src.exists():
             shutil.copy(src, DIST / extra)
@@ -552,7 +564,6 @@ def build():
             out.write_text(fill(render_page(p, lang), lang), encoding="utf-8")
     (DIST / "sitemap.xml").write_text(sitemap(), encoding="utf-8")
     (DIST / "robots.txt").write_text(ROBOTS.format(url=SITE["url"]), encoding="utf-8")
-    (DIST / ".htaccess").write_text(HTACCESS, encoding="utf-8")
     n = sum(len(c["pages"]) for c in LANGS.values())
     print(f"OK — {n} pages générées dans {DIST}")
 
