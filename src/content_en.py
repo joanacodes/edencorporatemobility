@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 # English content — Eden Corporate Mobility. Tokens {{...}} are replaced at build time.
 
+from services_en import SERVICE_PAGES
+
 UI = {
     "nav": [("housing", "Housing"), ("transport", "Transport"), ("wellbeing", "Wellbeing"), ("whowe", "Who we serve"), ("about", "About")],
     "footer_cols": [
@@ -9,12 +11,14 @@ UI = {
         ("Eden", ["about", "faq", "contact", "legal", "terms", "privacy"]),
     ],
     "hours": "{{hours_en}}",
+    "contact": "Contact",
     "call": "Call us",
     "call_number": "Call {{phone}}",
     "describe": "Describe your needs",
     "write": "Write",
     "switch": "FR",
     "switch_long": "Cette page en français",
+    "slide": "Slide",
     "skip": "Skip to content",
     "menu": "Menu",
     "nav_label": "Main navigation",
@@ -36,11 +40,11 @@ UI = {
 CLIENTS = ["Mecno Service", "Anschu Security", "Meule de Montélimar", "AvePoint Deutschland", "Kodemade", "MCP Sp. z o.o.", "OPCET", "Bee-U Partners"]
 
 SEGMENTS = [
-    {"title": "Consulting firms", "text": "A consultant on a six-month engagement needs a real apartment near the client, not a hotel room.", "href": "/en/consulting-firms/"},
-    {"title": "Construction companies", "text": "Crews working far from home must be housed properly, close to the site and on time. We take that off your hands.", "href": "/en/construction-companies/"},
-    {"title": "NGOs and organisations", "text": "Short notice, tight budgets, dates that move: we handle the unexpected and give you clean paperwork.", "href": "/en/ngos/"},
-    {"title": "SMEs and mid-size companies", "text": "No travel manager in-house? We play that role for your Paris trips, with one contact and one quote.", "href": "/en/smes/"},
-    {"title": "International groups", "text": "Seconding executives or opening a Paris office: housing, transfers, family settling-in, all in English.", "href": "/en/international-groups/"},
+    {"title": "Consulting firms", "text": "A consultant on a six-month engagement needs a real apartment near the client, not a hotel room.", "href": "/en/consulting-firms/", "img": "seg-conseil.jpg"},
+    {"title": "Construction companies", "text": "Crews working far from home must be housed properly, close to the site and on time. We take that off your hands.", "href": "/en/construction-companies/", "img": "seg-btp.jpg"},
+    {"title": "NGOs and organisations", "text": "Short notice, tight budgets, dates that move: we handle the unexpected and give you clean paperwork.", "href": "/en/ngos/", "img": "seg-ong.jpg"},
+    {"title": "SMEs and mid-size companies", "text": "No travel manager in-house? We play that role for your Paris trips, with one contact and one quote.", "href": "/en/smes/", "img": "seg-pme.jpg"},
+    {"title": "International groups", "text": "Seconding executives or opening a Paris office: housing, transfers, family settling-in, all in English.", "href": "/en/international-groups/", "img": "seg-intl.jpg"},
 ]
 
 TEAM = {
@@ -61,10 +65,13 @@ PAGES = [
     "key": "home", "slug": "", "alt": "", "nav": "Home",
     "title": "Corporate Housing in Paris for Your Employees | Eden Corporate Mobility",
     "desc": "Furnished housing, transport and wellbeing services for employees your company sends to Paris and the Île-de-France region. One English-speaking contact in Paris.",
-    "h1": "Housing, transport and care for your employees on assignment in Paris",
+    "h1": "Housing, transport and care for your employees <mark>on assignment in Paris</mark>",
     "hero": {
         "lead": "Sending a crew for three weeks or an executive for a year? We find the housing, organise the transport and look after your people once they land. One local contact who speaks your language, one quote.",
         "note": "Consulting firms, construction companies, NGOs, SMEs and international groups trust us with their teams in the Paris region.",
+        "kicker": "Corporate housing & mobility agency · Paris region",
+        "slides": ["hero-1.jpg", "hero-2.jpg", "hero-3.jpg", "hero-4.jpg"],
+        "pills": [("housing", "Housing", "/en/housing/"), ("transport", "Transport", "/en/transport/"), ("wellbeing", "Wellbeing services", "/en/wellbeing-services/")],
         "card_title": "Talk to a person in Paris, today.",
         "card_points": ["We answer in English and French", "Clear quote, no commitment", "Stays from a few nights to many months"],
     },
@@ -72,9 +79,9 @@ PAGES = [
         {"type": "logos", "heading": "Companies that trust us", "names": CLIENTS},
         {"type": "features", "heading": "What we take care of", "intro": "Everything that happens between your employee's departure and return, coordinated by one team on the ground in Paris.",
          "items": [
-            {"icon": "housing", "title": "Housing", "text": "Furnished apartments, aparthotels or hotels depending on the assignment. Chosen to be close to the workplace, quiet and ready to live in.", "href": "/en/housing/", "link": "See housing options"},
-            {"icon": "transport", "title": "Transport", "text": "Airport and station pick-ups, daily commutes to the assignment site: nobody has to work out the Paris metro on their first evening.", "href": "/en/transport/", "link": "See transport services"},
-            {"icon": "wellbeing", "title": "Wellbeing services", "text": "Welcome, concierge, activities: everything that makes a stay far from home simpler and more pleasant, and your team more effective.", "href": "/en/wellbeing-services/", "link": "See wellbeing services"},
+            {"icon": "housing", "img": "service-logement.jpg", "title": "Housing", "text": "Furnished apartments, aparthotels or hotels depending on the assignment. Chosen to be close to the workplace, quiet and ready to live in.", "href": "/en/housing/", "link": "See housing options"},
+            {"icon": "transport", "img": "service-transports.jpg", "title": "Transport", "text": "Airport and station pick-ups, daily commutes to the assignment site: nobody has to work out the Paris metro on their first evening.", "href": "/en/transport/", "link": "See transport services"},
+            {"icon": "wellbeing", "img": "service-bien-etre.jpg", "title": "Wellbeing services", "text": "Welcome, concierge, activities: everything that makes a stay far from home simpler and more pleasant, and your team more effective.", "href": "/en/wellbeing-services/", "link": "See wellbeing services"},
          ]},
         {"type": "segments", "id": "who-we-serve", "heading": "Who we work with", "intro": "Housing a consultant, a construction crew or an expatriate executive are three different jobs. We know each one.", "items": SEGMENTS},
         {"type": "steps", "heading": "How it works", "items": [
@@ -82,7 +89,7 @@ PAGES = [
             {"title": "We send you a selection", "text": "Suitable housing, transport and services, in one quote. You approve, we book."},
             {"title": "Your people arrive, everything is ready", "text": "Keys, transfers, services in place. We stay reachable for the whole stay and handle whatever comes up."},
         ]},
-        {"type": "twocol", "heading": "Why companies choose us", "aside": "<p class=\"muted\">Housing employees well is a productivity decision. That conviction is why Eden exists.</p>",
+        {"type": "twocol", "img": "home-why.jpg", "heading": "Why companies choose us", "aside": "<p class=\"muted\">Housing employees well is a productivity decision. That conviction is why Eden exists.</p>",
          "html": """<dl class="reasons">
 <dt>One contact, on the ground in Paris</dt><dd>No more email chains between a hotel, an agency and a driver in a language you may not speak: you call us, we coordinate everything locally.</dd>
 <dt>Housing we have chosen, not listings</dt><dd>Every property is selected for its location, quietness and equipment, for the assignment in question.</dd>
@@ -99,67 +106,7 @@ PAGES = [
         ]},
     ],
 },
-# ───────────────────────────── HOUSING
-{
-    "key": "housing", "slug": "housing", "alt": "logement", "nav": "Housing", "priority": "high",
-    "title": "Furnished Housing for Employees in Paris | Eden Corporate Mobility",
-    "desc": "Furnished apartments, aparthotels and hotels for staff on assignment in Paris and the Île-de-France region. A few nights to many months, close to the workplace.",
-    "h1": "Ready-to-live-in housing for every employee, in Paris and the surrounding region",
-    "lead": "We select and book the housing that fits the assignment: its length, its location, the number of people and your budget.",
-    "sections": [
-        {"type": "features", "heading": "Three formats, depending on length and rhythm of the assignment", "items": [
-            {"title": "Furnished apartment", "text": "For stays of a month or more. A real home with a kitchen, a place to work and peace and quiet. The format for consultants, relocated executives and expatriates."},
-            {"title": "Aparthotel", "text": "For stays of a few weeks. The comfort of an apartment with hotel services: cleaning, reception, linen."},
-            {"title": "Hotel", "text": "For short stays and last-minute arrivals. We book with establishments we know, near the place of work."},
-        ]},
-        {"type": "twocol", "heading": "What we check before proposing a property", "aside": "<p class=\"muted\">A property is not a listing. We choose it as if it were for a member of our own team.</p>",
-         "html": """<dl class="reasons">
-<dt>Location</dt><dd>Real travel time to the workplace, by public transport or car, at the hours your employee will actually commute.</dd>
-<dt>Quiet and comfort</dt><dd>Bedding, insulation, light, space to work. The difference between a stay endured and a stay enjoyed.</dd>
-<dt>Equipment</dt><dd>Full kitchen, washing machine, reliable wifi, TV. Everything needed to live, not just to sleep.</dd>
-<dt>Terms</dt><dd>Duration, flexibility, cleaning included or not, deposit: everything in writing before booking.</dd>
-</dl>"""},
-        {"type": "prose", "heading": "For groups and teams", "html": "<p>Several people on the same project or site? We house teams in the same building or neighbourhood, with equivalent commutes to the site. Single rooms, shared apartments or hotel: we propose what fits the budget and complies with your sector's accommodation rules.</p><p>The earlier you tell us, the more choice we have. But we also know how to handle an unplanned arrival.</p>"},
-        {"type": "faq", "heading": "Housing questions", "items": [
-            {"q": "Who signs: the company or the employee?", "a": "<p>In most cases the booking is made in your company's name; the company remains our contractual contact and receives the invoices. Your employee pays nothing up front and signs nothing on site except the check-in inventory.</p>"},
-            {"q": "What if the assignment runs longer?", "a": "<p>Tell us, and we extend the stay or arrange a follow-on solution with no disruption for the employee.</p>"},
-            {"q": "Can you house a family?", "a": "<p>Yes. For an expatriation or a relocation we look for housing that suits the family: number of bedrooms, neighbourhood, proximity to schools.</p>"},
-        ]},
-    ],
-},
-# ───────────────────────────── TRANSPORT
-{
-    "key": "transport", "slug": "transport", "alt": "transports", "nav": "Transport", "priority": "high",
-    "title": "Employee Transport & Airport Transfers, Paris | Eden Corporate Mobility",
-    "desc": "Airport and station transfers, daily commutes and team travel in Paris and the Île-de-France region, coordinated with your employees' housing.",
-    "h1": "Employees who arrive on time, without working out the way",
-    "lead": "We organise your team's travel in Paris and the surrounding region, coordinated with their housing and their work schedule.",
-    "sections": [
-        {"type": "features", "heading": "What we organise", "items": [
-            {"title": "Airport and station transfers", "text": "A driver meets your employee at Charles de Gaulle, Orly or the station and takes them to their door. No taxi queue, no app to install on arrival."},
-            {"title": "Daily commutes", "text": "Travel passes, recurring rides or a shuttle to the site, depending on the team's hours."},
-            {"title": "Team travel", "text": "Site visits, workshops, client meetings: a vehicle and driver for the whole team, on request."},
-        ]},
-        {"type": "prose", "heading": "Why housing and transport are decided together", "html": "<p>A place fifteen minutes from the site beats a nicer place an hour away. So we choose the housing around the commute first, then organise the journeys that remain. The result: rested, punctual employees available for what they came to do.</p><p>Everything sits on the same quote and is followed by the same person as the housing.</p>"},
-    ],
-},
-# ───────────────────────────── WELLBEING
-{
-    "key": "wellbeing", "slug": "wellbeing-services", "alt": "services-bien-etre", "nav": "Wellbeing", "priority": "high",
-    "title": "Wellbeing & Concierge Services, Paris | Eden Corporate Mobility",
-    "desc": "Welcome, concierge, activities and family support for your employees on assignment in Paris. Because a well-settled team works better.",
-    "h1": "Your employees' wellbeing, looked after on the ground",
-    "lead": "Far from home, small things matter: a stocked fridge on arrival, a gym membership, an appointment booked. We take care of them.",
-    "sections": [
-        {"type": "features", "heading": "À la carte or as a full programme", "items": [
-            {"title": "Welcome and settling-in", "text": "Arrival groceries, a walk around the neighbourhood, help with everyday admin. Your employee feels expected from the first evening."},
-            {"title": "Concierge during the stay", "text": "Cleaning, laundry, bookings, deliveries, small emergencies: one number to call for everything that is not the job."},
-            {"title": "Sport and activities", "text": "Gym access, discovering Paris, team outings: what keeps balance and motivation on long assignments."},
-            {"title": "Family support", "text": "For expatriations and relocations: schools, childcare, helping the partner settle. A well-settled family means a focused employee."},
-        ]},
-        {"type": "prose", "heading": "A programme built for you", "html": "<p>Every company and every employee is different. Anna, our head of premium services, builds the programme with you: a few à la carte services for a short assignment, full support for an expatriation. You decide what is included; we take care of the rest.</p>"},
-    ],
-},
+] + SERVICE_PAGES + [
 # ───────────────────────────── WHO WE SERVE (hub)
 {
     "key": "whowe", "slug": "who-we-serve", "alt": "pour-qui", "nav": "Who we serve",
@@ -171,7 +118,7 @@ PAGES = [
 },
 # ───────────────────────────── SEGMENTS
 {
-    "key": "consulting", "slug": "consulting-firms", "alt": "cabinets-de-conseil", "nav": "Consulting firms", "parent": "whowe", "priority": "high",
+    "key": "consulting", "image": "seg-conseil.jpg", "slug": "consulting-firms", "alt": "cabinets-de-conseil", "nav": "Consulting firms", "parent": "whowe", "priority": "high",
     "title": "Housing for Consultants on Assignment in Paris | Eden Corporate Mobility",
     "desc": "Furnished apartments and services for your consultants on long engagements in Paris: close to the client, flexible, one quote per engagement for easy rebilling.",
     "h1": "Housing and services for your consultants in Paris",
@@ -191,7 +138,7 @@ PAGES = [
     ],
 },
 {
-    "key": "construction", "slug": "construction-companies", "alt": "entreprises-btp", "nav": "Construction companies", "parent": "whowe", "priority": "high",
+    "key": "construction", "image": "seg-btp.jpg", "slug": "construction-companies", "alt": "entreprises-btp", "nav": "Construction companies", "parent": "whowe", "priority": "high",
     "title": "Construction Crew Accommodation in Paris | Eden Corporate Mobility",
     "desc": "Workforce housing for your crews on construction sites in Paris and the Île-de-France region: grouped accommodation near the site, compliant, with transport.",
     "h1": "Accommodation for your construction crews in the Paris region",
@@ -213,7 +160,7 @@ PAGES = [
     ],
 },
 {
-    "key": "ngo", "slug": "ngos", "alt": "ong", "nav": "NGOs and organisations", "parent": "whowe", "priority": "high",
+    "key": "ngo", "image": "seg-ong.jpg", "slug": "ngos", "alt": "ong", "nav": "NGOs and organisations", "parent": "whowe", "priority": "high",
     "title": "Accommodation for NGO Teams on Mission in Paris | Eden Corporate Mobility",
     "desc": "Housing and transport for NGO and international organisation teams on mission in Paris: fast response, controlled budgets, clean paperwork for donors.",
     "h1": "Housing your teams in Paris, fast and within budget",
@@ -229,7 +176,7 @@ PAGES = [
     ],
 },
 {
-    "key": "sme", "slug": "smes", "alt": "pme-eti", "nav": "SMEs and mid-size companies", "parent": "whowe", "priority": "high",
+    "key": "sme", "image": "seg-pme.jpg", "slug": "smes", "alt": "pme-eti", "nav": "SMEs and mid-size companies", "parent": "whowe", "priority": "high",
     "title": "Business Travel Housing in Paris for SMEs | Eden Corporate Mobility",
     "desc": "No travel manager? We handle housing, transport and services for your employees travelling to Paris, with one local contact and one quote.",
     "h1": "Your outsourced travel manager for Paris",
@@ -245,7 +192,7 @@ PAGES = [
     ],
 },
 {
-    "key": "intl", "slug": "international-groups", "alt": "groupes-internationaux", "nav": "International groups", "parent": "whowe", "priority": "high",
+    "key": "intl", "image": "seg-intl.jpg", "slug": "international-groups", "alt": "groupes-internationaux", "nav": "International groups", "parent": "whowe", "priority": "high",
     "title": "Relocating International Staff to Paris | Eden Corporate Mobility",
     "desc": "Seconding executives or opening an office in Paris? Housing, airport transfers, settling-in and family support for your expatriates, in English and French.",
     "h1": "Settling your international employees in Paris",
@@ -274,7 +221,7 @@ PAGES = [
     "sections": [
         {"type": "prose", "heading": "What we believe", "html": "<p>Housing employees well is a productivity decision. Someone who sleeps well, does not spend an hour commuting each morning and knows who to call when something goes wrong does better work. And keeps a good memory of the company that sent them.</p><p>Eden Corporate Mobility was founded on that observation. Our mission: simplify your operations and give every employee a premium experience, from departure to return.</p>"},
         TEAM,
-        {"type": "twocol", "heading": "How we work", "aside": "<p class=\"muted\">Based in Paris, we work in English and French with French and European companies.</p>",
+        {"type": "twocol", "img": "about-team.jpg", "heading": "How we work", "aside": "<p class=\"muted\">Based in the Paris region, we work in English and French with French and European companies.</p>",
          "html": """<dl class="reasons">
 <dt>We select</dt><dd>We do not forward lists of properties. We choose the ones that fit the assignment, and we stand behind that choice.</dd>
 <dt>We answer fast</dt><dd>One call, one answer. We know every request has an arrival date getting closer.</dd>
@@ -291,7 +238,7 @@ PAGES = [
     "h1": "Rent your furnished property to companies",
     "lead": "Professional tenants, stays agreed in advance and one point of contact: join Eden Corporate Mobility's housing network.",
     "sections": [
-        {"type": "twocol", "heading": "What we look for", "aside": "<p class=\"muted\">We visit and select every property before offering it to our clients.</p>",
+        {"type": "twocol", "img": "owners-appartement.jpg", "heading": "What we look for", "aside": "<p class=\"muted\">We visit and select every property before offering it to our clients.</p>",
          "html": """<dl class="reasons">
 <dt>Ready-to-live-in furnished homes</dt><dd>Studios, one-bedrooms and larger, fully equipped, in Paris and the inner suburbs, close to public transport.</dd>
 <dt>Availability from a few weeks to several months</dt><dd>Our clients need mid-length stays: ideal if your property is free between tenants or for part of the year.</dd>
@@ -335,7 +282,7 @@ PAGES = [
          "form": {"heading": "Or describe your needs", "intro": "Dates, number of people, work location, budget: we will call you back.",
                   "success": "Thank you, your request has been sent. We will call you back shortly.",
                   "privacy": "Your details are used only to handle your request. <a href=\"/en/privacy-policy/\">Privacy policy</a>.",
-                  "submit": "Send my request",
+                  "submit": "Send my request", "subject": "[Website] New contact request",
                   "fields": [
                       {"name": "name", "label": "Full name", "type": "text", "req": True, "ac": "name"},
                       {"name": "company", "label": "Company", "type": "text", "req": True, "ac": "organization"},
@@ -420,7 +367,7 @@ PAGES = [
 <h2>3. Purposes and legal bases</h2>
 <p>Answering your requests and preparing quotes (pre-contractual measures); performing and invoicing services (performance of a contract); complying with accounting and tax obligations (legal obligation); maintaining the business relationship with our business clients and informing you about our services (legitimate interest, with the right to object at any time); measuring site audience (consent).</p>
 <h2>4. Recipients</h2>
-<p>Your data are processed by Eden's team and, to the extent necessary to perform the services, shared with the providers concerned (owners and operators of accommodation, transport companies, service providers), as well as with our technical processors (website hosting, email, management and invoicing tools). We do not sell your data.</p>
+<p>Your data are processed by Eden's team and, to the extent necessary to perform the services, shared with the providers concerned (owners and operators of accommodation, transport companies, service providers), as well as with our technical processors (website hosting, contact-form delivery by FormSubmit, email, management and invoicing tools). We do not sell your data.</p>
 <h2>5. Transfers outside the European Union</h2>
 <p>Our data are hosted in the European Union. Where one of our tools involves a transfer outside the EU, it is covered by appropriate safeguards (European Commission standard contractual clauses or an adequacy decision).</p>
 <h2>6. Retention periods</h2>

@@ -2,6 +2,8 @@
 # Contenu FR — Eden Corporate Mobility
 # Les jetons {{...}} sont remplacés au build (voir SITE dans build.py).
 
+from services_fr import SERVICE_PAGES
+
 UI = {
     "nav": [("housing", "Logement"), ("transport", "Transports"), ("wellbeing", "Bien-être"), ("whowe", "Pour qui"), ("about", "À propos")],
     "footer_cols": [
@@ -10,12 +12,14 @@ UI = {
         ("Eden", ["about", "faq", "contact", "legal", "terms", "privacy"]),
     ],
     "hours": "{{hours}}",
+    "contact": "Contact",
     "call": "Appeler",
     "call_number": "Appeler le {{phone}}",
     "describe": "Décrire votre besoin",
     "write": "Écrire",
     "switch": "EN",
     "switch_long": "This page in English",
+    "slide": "Diapositive",
     "skip": "Aller au contenu",
     "menu": "Menu",
     "nav_label": "Navigation principale",
@@ -37,11 +41,11 @@ UI = {
 CLIENTS = ["Mecno Service", "Anschu Security", "Meule de Montélimar", "AvePoint Deutschland", "Kodemade", "MCP Sp. z o.o.", "OPCET", "Bee-U Partners"]
 
 SEGMENTS = [
-    {"title": "Cabinets de conseil", "text": "Un consultant en mission de six mois a besoin d'un vrai appartement près du client, pas d'une chambre d'hôtel.", "href": "/cabinets-de-conseil/"},
-    {"title": "Entreprises du BTP", "text": "En grand déplacement, l'hébergement de vos équipes relève de votre responsabilité. Nous le prenons en charge, près du chantier.", "href": "/entreprises-btp/"},
-    {"title": "ONG et organisations", "text": "Des arrivées rapides, des budgets serrés, des durées qui bougent : nous gérons l'imprévu et les justificatifs.", "href": "/ong/"},
-    {"title": "PME et ETI", "text": "Pas de travel manager en interne ? Nous jouons ce rôle pour vous, avec un seul interlocuteur et un seul devis.", "href": "/pme-eti/"},
-    {"title": "Groupes internationaux", "text": "Vous détachez des cadres ou ouvrez un bureau à Paris : logement, transferts, installation des familles, en anglais.", "href": "/groupes-internationaux/"},
+    {"title": "Cabinets de conseil", "text": "Un consultant en mission de six mois a besoin d'un vrai appartement près du client, pas d'une chambre d'hôtel.", "href": "/cabinets-de-conseil/", "img": "seg-conseil.jpg"},
+    {"title": "Entreprises du BTP", "text": "En grand déplacement, l'hébergement de vos équipes relève de votre responsabilité. Nous le prenons en charge, près du chantier.", "href": "/entreprises-btp/", "img": "seg-btp.jpg"},
+    {"title": "ONG et organisations", "text": "Des arrivées rapides, des budgets serrés, des durées qui bougent : nous gérons l'imprévu et les justificatifs.", "href": "/ong/", "img": "seg-ong.jpg"},
+    {"title": "PME et ETI", "text": "Pas de travel manager en interne ? Nous jouons ce rôle pour vous, avec un seul interlocuteur et un seul devis.", "href": "/pme-eti/", "img": "seg-pme.jpg"},
+    {"title": "Groupes internationaux", "text": "Vous détachez des cadres ou ouvrez un bureau à Paris : logement, transferts, installation des familles, en anglais.", "href": "/groupes-internationaux/", "img": "seg-intl.jpg"},
 ]
 
 TEAM = {
@@ -62,10 +66,13 @@ PAGES = [
     "key": "home", "slug": "", "alt": "", "nav": "Accueil",
     "title": "Corporate housing & mobilité à Paris | Eden Corporate Mobility",
     "desc": "Logement meublé, transports et services pour vos collaborateurs en mission à Paris et en Île-de-France. Un interlocuteur unique, en français et en anglais.",
-    "h1": "Logement, transports et services pour vos collaborateurs en mission à Paris",
+    "h1": "Logement, transports et services pour vos collaborateurs <mark>en mission à Paris</mark>",
     "hero": {
         "lead": "Vous envoyez une équipe pour trois semaines ou un cadre pour un an ? Nous trouvons le logement, organisons les déplacements et prenons soin de vos collaborateurs sur place. Un seul interlocuteur, un seul devis.",
         "note": "Cabinets de conseil, entreprises du BTP, ONG, PME et groupes internationaux nous confient leurs équipes en Île-de-France.",
+        "kicker": "Agence de mobilité professionnelle · Paris & Île-de-France",
+        "slides": ["hero-1.jpg", "hero-2.jpg", "hero-3.jpg", "hero-4.jpg"],
+        "pills": [("housing", "Logement", "/logement/"), ("transport", "Transports", "/transports/"), ("wellbeing", "Services bien-être", "/services-bien-etre/")],
         "card_title": "Parlez à un humain, aujourd'hui.",
         "card_points": ["Réponse en français et en anglais", "Devis clair, sans engagement", "Séjours de quelques nuits à plusieurs mois"],
     },
@@ -73,9 +80,9 @@ PAGES = [
         {"type": "logos", "heading": "Ils nous font confiance", "names": CLIENTS},
         {"type": "features", "heading": "Ce que nous prenons en charge", "intro": "Tout ce qui se passe entre le départ de votre collaborateur et son retour, coordonné par une seule équipe.",
          "items": [
-            {"icon": "housing", "title": "Logement", "text": "Appartements meublés, aparthotels ou hôtels selon la mission. Sélectionnés pour être proches du lieu de travail, calmes et prêts à vivre.", "href": "/logement/", "link": "Voir les solutions de logement"},
-            {"icon": "transport", "title": "Transports", "text": "Transferts depuis les aéroports et les gares, trajets quotidiens vers le lieu de mission : personne n'a à chercher son chemin en arrivant.", "href": "/transports/", "link": "Voir les transports"},
-            {"icon": "wellbeing", "title": "Services bien-être", "text": "Accueil, conciergerie, activités : tout ce qui rend un séjour loin de chez soi plus simple, plus agréable, et vos équipes plus efficaces.", "href": "/services-bien-etre/", "link": "Voir les services"},
+            {"icon": "housing", "img": "service-logement.jpg", "title": "Logement", "text": "Appartements meublés, aparthotels ou hôtels selon la mission. Sélectionnés pour être proches du lieu de travail, calmes et prêts à vivre.", "href": "/logement/", "link": "Voir les solutions de logement"},
+            {"icon": "transport", "img": "service-transports.jpg", "title": "Transports", "text": "Transferts depuis les aéroports et les gares, trajets quotidiens vers le lieu de mission : personne n'a à chercher son chemin en arrivant.", "href": "/transports/", "link": "Voir les transports"},
+            {"icon": "wellbeing", "img": "service-bien-etre.jpg", "title": "Services bien-être", "text": "Accueil, conciergerie, activités : tout ce qui rend un séjour loin de chez soi plus simple, plus agréable, et vos équipes plus efficaces.", "href": "/services-bien-etre/", "link": "Voir les services"},
          ]},
         {"type": "segments", "id": "pour-qui", "heading": "Pour qui nous travaillons", "intro": "Le logement d'un consultant, d'une équipe de chantier ou d'un cadre expatrié ne se gère pas de la même façon.", "items": SEGMENTS},
         {"type": "steps", "heading": "Comment ça se passe", "items": [
@@ -83,7 +90,7 @@ PAGES = [
             {"title": "Nous vous proposons une sélection", "text": "Logements adaptés, transports et services, réunis dans un devis unique. Vous validez, nous réservons."},
             {"title": "Vos collaborateurs arrivent, tout est prêt", "text": "Clés, transferts, services en place. Nous restons joignables pendant tout le séjour et nous gérons les imprévus."},
         ]},
-        {"type": "twocol", "heading": "Pourquoi les entreprises nous choisissent", "aside": "<p class=\"muted\">Bien loger ses collaborateurs, c'est gagner en productivité. C'est la conviction qui a fondé Eden.</p>",
+        {"type": "twocol", "img": "home-why.jpg", "heading": "Pourquoi les entreprises nous choisissent", "aside": "<p class=\"muted\">Bien loger ses collaborateurs, c'est gagner en productivité. C'est la conviction qui a fondé Eden.</p>",
          "html": """<dl class="reasons">
 <dt>Un seul interlocuteur</dt><dd>Plus de dix mails entre l'hôtel, l'agence et le chauffeur : vous nous appelez, nous coordonnons tout.</dd>
 <dt>Des logements choisis, pas des listings</dt><dd>Chaque logement est sélectionné pour sa localisation, son calme et son équipement, en fonction de la mission.</dd>
@@ -100,67 +107,7 @@ PAGES = [
         ]},
     ],
 },
-# ───────────────────────────── LOGEMENT
-{
-    "key": "housing", "slug": "logement", "alt": "housing", "nav": "Logement", "priority": "high",
-    "title": "Logement pour collaborateurs en mission à Paris | Eden Corporate Mobility",
-    "desc": "Appartements meublés, aparthotels et hôtels pour vos salariés en déplacement à Paris et en Île-de-France. De quelques nuits à plusieurs mois, près du lieu de mission.",
-    "h1": "Un logement prêt à vivre pour chaque collaborateur, à Paris et en Île-de-France",
-    "lead": "Nous sélectionnons et réservons le logement qui correspond à la mission : sa durée, son lieu, le nombre de personnes et votre budget.",
-    "sections": [
-        {"type": "features", "heading": "Trois formats, selon la durée et le rythme de la mission", "items": [
-            {"title": "Appartement meublé", "text": "Pour les séjours d'un mois et plus. Un vrai chez-soi avec cuisine, espace de travail et calme. Le format des consultants, des cadres en mutation et des expatriés."},
-            {"title": "Aparthotel", "text": "Pour les séjours de quelques semaines. Le confort d'un appartement avec les services d'un hôtel : ménage, réception, linge."},
-            {"title": "Hôtel", "text": "Pour les séjours courts et les arrivées en urgence. Nous réservons auprès d'établissements que nous connaissons, près de votre lieu de mission."},
-        ]},
-        {"type": "twocol", "heading": "Ce que nous vérifions avant de vous proposer un logement", "aside": "<p class=\"muted\">Un logement n'est pas un listing. Nous le choisissons comme si c'était pour un membre de notre équipe.</p>",
-         "html": """<dl class="reasons">
-<dt>La localisation</dt><dd>Le temps de trajet réel vers le lieu de mission, en transports en commun ou en voiture, aux heures où votre collaborateur se déplace.</dd>
-<dt>Le calme et le confort</dt><dd>Literie, isolation, lumière, espace pour travailler. Ce qui fait la différence entre un séjour subi et un séjour agréable.</dd>
-<dt>L'équipement</dt><dd>Cuisine complète, lave-linge, wifi fiable, télévision. Tout ce qu'il faut pour vivre, pas seulement pour dormir.</dd>
-<dt>Les conditions</dt><dd>Durée, flexibilité, ménage inclus ou non, dépôt de garantie : tout est écrit noir sur blanc avant la réservation.</dd>
-</dl>"""},
-        {"type": "prose", "heading": "Pour les groupes et les équipes", "html": "<p>Plusieurs personnes sur un même projet ou un même chantier ? Nous logeons les équipes dans un même immeuble ou un même quartier, avec des trajets équivalents vers le site. Chambres individuelles, appartements partagés ou hôtel : nous vous proposons ce qui tient le budget et respecte les règles d'hébergement de votre secteur.</p><p>Plus vous nous prévenez tôt, plus nous avons de choix. Mais nous savons aussi gérer une arrivée imprévue.</p>"},
-        {"type": "faq", "heading": "Questions sur le logement", "items": [
-            {"q": "Qui signe : l'entreprise ou le collaborateur ?", "a": "<p>Dans la plupart des cas, la réservation est établie au nom de votre entreprise, qui reste notre interlocuteur contractuel et le destinataire des factures. Votre collaborateur n'a rien à avancer et rien à signer sur place, sauf l'état des lieux.</p>"},
-            {"q": "Que se passe-t-il si la mission s'allonge ?", "a": "<p>Vous nous prévenez, nous prolongeons le séjour ou organisons une solution de relais, sans rupture pour le collaborateur.</p>"},
-            {"q": "Pouvez-vous loger une famille ?", "a": "<p>Oui. Pour une expatriation ou une mutation, nous cherchons un logement adapté à la famille : nombre de chambres, quartier, proximité des écoles.</p>"},
-        ]},
-    ],
-},
-# ───────────────────────────── TRANSPORTS
-{
-    "key": "transport", "slug": "transports", "alt": "transport", "nav": "Transports", "priority": "high",
-    "title": "Transports pour collaborateurs en déplacement à Paris | Eden Corporate Mobility",
-    "desc": "Transferts aéroport et gare, trajets quotidiens et déplacements d'équipes à Paris et en Île-de-France, coordonnés avec le logement de vos collaborateurs.",
-    "h1": "Des collaborateurs qui arrivent à l'heure, sans chercher leur chemin",
-    "lead": "Nous organisons les déplacements de vos équipes à Paris et en Île-de-France, coordonnés avec leur logement et leur planning de mission.",
-    "sections": [
-        {"type": "features", "heading": "Ce que nous organisons", "items": [
-            {"title": "Transferts aéroport et gare", "text": "Un chauffeur attend votre collaborateur à Roissy, Orly ou en gare et l'accompagne jusqu'à son logement. Pas de file d'attente aux taxis, pas d'application à installer à l'arrivée."},
-            {"title": "Trajets quotidiens", "text": "Titres de transport, courses récurrentes ou navette vers le site de mission, selon les horaires de l'équipe."},
-            {"title": "Déplacements d'équipe", "text": "Visites de chantier, séminaires, rendez-vous clients : un véhicule et un chauffeur pour toute l'équipe, à la demande."},
-        ]},
-        {"type": "prose", "heading": "Pourquoi coordonner transport et logement", "html": "<p>Un logement à quinze minutes du lieu de mission vaut mieux qu'un logement plus beau à une heure de trajet. C'est pour cela que nous choisissons d'abord le logement en fonction des déplacements, puis organisons les trajets qui restent. Le résultat : des collaborateurs reposés, ponctuels et disponibles pour ce qu'ils sont venus faire.</p><p>Tout est réuni dans le même devis et suivi par la même personne que le logement.</p>"},
-    ],
-},
-# ───────────────────────────── BIEN-ÊTRE
-{
-    "key": "wellbeing", "slug": "services-bien-etre", "alt": "wellbeing-services", "nav": "Bien-être", "priority": "high",
-    "title": "Services bien-être pour salariés en mission à Paris | Eden Corporate Mobility",
-    "desc": "Accueil, conciergerie, activités et accompagnement des familles pour vos collaborateurs en mission à Paris. Une équipe bien installée travaille mieux.",
-    "h1": "Le bien-être de vos collaborateurs, pris en charge sur place",
-    "lead": "Loin de chez soi, les petites choses comptent : un frigo rempli à l'arrivée, un abonnement sportif, un rendez-vous pris. Nous nous en occupons.",
-    "sections": [
-        {"type": "features", "heading": "Des services à la carte ou en programme complet", "items": [
-            {"title": "Accueil et installation", "text": "Courses d'arrivée, présentation du quartier, aide aux démarches du quotidien. Votre collaborateur se sent attendu dès le premier soir."},
-            {"title": "Conciergerie pendant le séjour", "text": "Ménage, pressing, réservations, livraisons, petits imprévus : un numéro à appeler pour tout ce qui n'est pas la mission."},
-            {"title": "Sport et activités", "text": "Accès à une salle de sport, découverte de Paris, sorties d'équipe : de quoi garder l'équilibre et la motivation sur les missions longues."},
-            {"title": "Accompagnement des familles", "text": "Pour les expatriations et les mutations : écoles, garde d'enfants, installation du conjoint. Une famille bien installée, c'est un collaborateur serein."},
-        ]},
-        {"type": "prose", "heading": "Un programme sur mesure", "html": "<p>Chaque entreprise et chaque collaborateur sont différents. Anna, responsable des services premium, construit avec vous un programme adapté : quelques services à la carte pour une mission courte, un accompagnement complet pour une expatriation. Vous décidez ce qui est inclus, nous nous chargeons du reste.</p>"},
-    ],
-},
+] + SERVICE_PAGES + [
 # ───────────────────────────── POUR QUI (hub)
 {
     "key": "whowe", "slug": "pour-qui", "alt": "who-we-serve", "nav": "Pour qui",
@@ -172,7 +119,7 @@ PAGES = [
 },
 # ───────────────────────────── SEGMENTS
 {
-    "key": "consulting", "slug": "cabinets-de-conseil", "alt": "consulting-firms", "nav": "Cabinets de conseil", "parent": "whowe", "priority": "high",
+    "key": "consulting", "image": "seg-conseil.jpg", "slug": "cabinets-de-conseil", "alt": "consulting-firms", "nav": "Cabinets de conseil", "parent": "whowe", "priority": "high",
     "title": "Logement pour consultants en mission à Paris | Eden Corporate Mobility",
     "desc": "Appartements meublés et services pour vos consultants en mission à Paris : proches du client, flexibles, avec un devis par mission pour faciliter la refacturation.",
     "h1": "Logement et services pour vos consultants en mission à Paris",
@@ -192,7 +139,7 @@ PAGES = [
     ],
 },
 {
-    "key": "construction", "slug": "entreprises-btp", "alt": "construction-companies", "nav": "Entreprises du BTP", "parent": "whowe", "priority": "high",
+    "key": "construction", "image": "seg-btp.jpg", "slug": "entreprises-btp", "alt": "construction-companies", "nav": "Entreprises du BTP", "parent": "whowe", "priority": "high",
     "title": "Hébergement d'équipes de chantier en Île-de-France | Eden Corporate Mobility",
     "desc": "Logement de vos ouvriers en grand déplacement sur vos chantiers en Île-de-France : hébergements groupés près du site, décents et conformes, transport inclus.",
     "h1": "Hébergement de vos équipes de chantier en Île-de-France",
@@ -214,7 +161,7 @@ PAGES = [
     ],
 },
 {
-    "key": "ngo", "slug": "ong", "alt": "ngos", "nav": "ONG et organisations", "parent": "whowe", "priority": "high",
+    "key": "ngo", "image": "seg-ong.jpg", "slug": "ong", "alt": "ngos", "nav": "ONG et organisations", "parent": "whowe", "priority": "high",
     "title": "Hébergement d'équipes d'ONG en mission à Paris | Eden Corporate Mobility",
     "desc": "Logement et transport pour les équipes d'ONG et d'organisations internationales en mission à Paris : réactivité, budgets maîtrisés, justificatifs clairs.",
     "h1": "Loger vos équipes en mission à Paris, vite et dans le budget",
@@ -230,7 +177,7 @@ PAGES = [
     ],
 },
 {
-    "key": "sme", "slug": "pme-eti", "alt": "smes", "nav": "PME et ETI", "parent": "whowe", "priority": "high",
+    "key": "sme", "image": "seg-pme.jpg", "slug": "pme-eti", "alt": "smes", "nav": "PME et ETI", "parent": "whowe", "priority": "high",
     "title": "Déplacements professionnels des PME et ETI à Paris | Eden Corporate Mobility",
     "desc": "Pas de travel manager ? Nous gérons logement, transports et services de vos collaborateurs en déplacement à Paris, avec un interlocuteur unique et un seul devis.",
     "h1": "Votre travel manager externalisé pour Paris",
@@ -246,7 +193,7 @@ PAGES = [
     ],
 },
 {
-    "key": "intl", "slug": "groupes-internationaux", "alt": "international-groups", "nav": "Groupes internationaux", "parent": "whowe", "priority": "high",
+    "key": "intl", "image": "seg-intl.jpg", "slug": "groupes-internationaux", "alt": "international-groups", "nav": "Groupes internationaux", "parent": "whowe", "priority": "high",
     "title": "Relocation de collaborateurs internationaux à Paris | Eden Corporate Mobility",
     "desc": "Vous détachez des cadres ou ouvrez un bureau à Paris ? Logement, transferts, installation et accompagnement de vos expatriés, en anglais et en français.",
     "h1": "Installer vos collaborateurs internationaux à Paris",
@@ -275,7 +222,7 @@ PAGES = [
     "sections": [
         {"type": "prose", "heading": "Notre conviction", "html": "<p>Bien loger ses collaborateurs, c'est gagner en productivité. Un salarié qui dort bien, qui n'a pas une heure de trajet le matin et qui sait à qui s'adresser quand quelque chose ne va pas travaille mieux. Et il garde un bon souvenir de l'entreprise qui l'a envoyé.</p><p>Eden Corporate Mobility est née de ce constat. Notre mission : simplifier vos opérations et offrir une expérience premium à chaque collaborateur, du départ au retour.</p>"},
         TEAM,
-        {"type": "twocol", "heading": "Comment nous travaillons", "aside": "<p class=\"muted\">Basés à Paris, nous travaillons en français et en anglais avec des entreprises françaises et européennes.</p>",
+        {"type": "twocol", "img": "about-team.jpg", "heading": "Comment nous travaillons", "aside": "<p class=\"muted\">Basés en Île-de-France, nous travaillons en français et en anglais avec des entreprises françaises et européennes.</p>",
          "html": """<dl class="reasons">
 <dt>Nous sélectionnons</dt><dd>Nous ne transmettons pas des listes de logements. Nous choisissons ceux qui conviennent à la mission et nous répondons de ce choix.</dd>
 <dt>Nous répondons vite</dt><dd>Un appel, une réponse. Nous savons que derrière chaque demande il y a une date d'arrivée qui approche.</dd>
@@ -292,7 +239,7 @@ PAGES = [
     "h1": "Louez votre logement meublé à des entreprises",
     "lead": "Des locataires professionnels, des séjours convenus à l'avance et un interlocuteur unique : rejoignez le réseau de logements d'Eden Corporate Mobility.",
     "sections": [
-        {"type": "twocol", "heading": "Ce que nous recherchons", "aside": "<p class=\"muted\">Nous visitons et sélectionnons chaque logement avant de le proposer à nos clients.</p>",
+        {"type": "twocol", "img": "owners-appartement.jpg", "heading": "Ce que nous recherchons", "aside": "<p class=\"muted\">Nous visitons et sélectionnons chaque logement avant de le proposer à nos clients.</p>",
          "html": """<dl class="reasons">
 <dt>Des meublés prêts à vivre</dt><dd>Studios, deux-pièces et plus grands, entièrement équipés, à Paris et en petite couronne, proches des transports.</dd>
 <dt>Des disponibilités de quelques semaines à plusieurs mois</dt><dd>Nos clients ont des besoins de durée moyenne : idéal si votre logement est libre entre deux locations ou une partie de l'année.</dd>
@@ -335,7 +282,7 @@ PAGES = [
          "form": {"heading": "Ou décrivez votre besoin", "intro": "Dates, nombre de personnes, lieu de mission, budget : nous vous rappelons.",
                   "success": "Merci, votre demande est bien envoyée. Nous vous rappelons rapidement.",
                   "privacy": "Vos données servent uniquement à traiter votre demande. <a href=\"/politique-de-confidentialite/\">Politique de confidentialité</a>.",
-                  "submit": "Envoyer ma demande",
+                  "submit": "Envoyer ma demande", "subject": "[Site web] Nouvelle demande de contact",
                   "fields": [
                       {"name": "name", "label": "Nom et prénom", "type": "text", "req": True, "ac": "name"},
                       {"name": "company", "label": "Entreprise", "type": "text", "req": True, "ac": "organization"},
@@ -419,7 +366,7 @@ PAGES = [
 <h2>3. Finalités et bases légales</h2>
 <p>Répondre à vos demandes et établir des devis (mesures précontractuelles) ; exécuter et facturer les prestations (exécution du contrat) ; respecter nos obligations comptables et fiscales (obligation légale) ; entretenir la relation commerciale avec nos clients professionnels et vous informer de nos services (intérêt légitime, avec possibilité de vous y opposer à tout moment) ; mesurer l'audience du site (consentement).</p>
 <h2>4. Destinataires</h2>
-<p>Vos données sont traitées par l'équipe d'Eden et, dans la mesure nécessaire à l'exécution des prestations, transmises aux prestataires concernés (propriétaires et exploitants d'hébergements, transporteurs, prestataires de services), ainsi qu'à nos sous-traitants techniques (hébergement du site, messagerie, outils de gestion et de facturation). Nous ne vendons pas vos données.</p>
+<p>Vos données sont traitées par l'équipe d'Eden et, dans la mesure nécessaire à l'exécution des prestations, transmises aux prestataires concernés (propriétaires et exploitants d'hébergements, transporteurs, prestataires de services), ainsi qu'à nos sous-traitants techniques (hébergement du site, acheminement du formulaire de contact par FormSubmit, messagerie, outils de gestion et de facturation). Nous ne vendons pas vos données.</p>
 <h2>5. Transferts hors Union européenne</h2>
 <p>Nos données sont hébergées dans l'Union européenne. Si l'un de nos outils implique un transfert hors UE, il est encadré par des garanties appropriées (clauses contractuelles types de la Commission européenne ou décision d'adéquation).</p>
 <h2>6. Durées de conservation</h2>

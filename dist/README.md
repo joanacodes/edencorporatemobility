@@ -1,6 +1,14 @@
 # Eden Corporate Mobility — nouveau site (FR / EN)
 
-Site statique bilingue, 34 pages, prêt pour Hostinger. Aucune dépendance : HTML, CSS, JS, un fichier PHP pour le formulaire.
+Site statique bilingue, 34 pages, prêt pour Hostinger. Aucune dépendance et aucun code serveur : HTML, CSS, JS. Le formulaire de contact passe par FormSubmit (service gratuit, sans compte).
+
+## 0. Version 2 : images, diaporama, animations
+
+- **Images** : 32 emplacements, tous nommés (`assets/img/`). Le site est livré avec des images provisoires ; remplacez-les par vos photos ou par des images générées avec les prompts du fichier `IMAGES-PROMPTS.md`, en gardant le même nom de fichier.
+- **Accueil** : diaporama de 4 images dans le hero (effet Ken Burns, rotation toutes les 6 s, points cliquables), ligne d'accroche « Agence de mobilité professionnelle · Paris & Île-de-France », raccourcis vers les trois services, blocs de services et de secteurs illustrés, bandeau de clients défilant.
+- **Pages de services** : bannière, blocs illustrés, sections image + texte, étapes, FAQ. Environ 1 000 mots par page, en FR et en EN.
+- **Animations** : apparition au défilement (IntersectionObserver), en-tête qui s'ombre au défilement, zoom léger des images au survol, compteurs animés si vous renseignez `SITE.stats` dans `build.py`. Tout est désactivé pour les personnes qui ont demandé « réduire les animations » dans leur système, et le contenu reste visible sans JavaScript.
+- **Mentions légales** : renseignées avec les données publiques d'EDENEL PATRIMOINE GESTION RESEAUX & SERVICES (SAS, SIREN 104 632 591, Sucy-en-Brie). Restent à compléter : numéro de carte professionnelle loi Hoguet, garantie financière, et confirmation du directeur de la publication (Ayajénu Hounnou, Président).
 
 ## 1. Contenu du livrable
 
@@ -9,7 +17,6 @@ dist/              ← À TÉLÉVERSER TEL QUEL dans public_html (Hostinger)
   index.html       ← accueil FR ; /en/ = accueil EN
   logement/ transports/ services-bien-etre/ pour-qui/ …   (FR)
   en/housing/ en/transport/ en/wellbeing-services/ …       (EN)
-  contact.php      ← traitement du formulaire (mettre l'adresse email de réception)
   sitemap.xml  robots.txt  .htaccess  404.html  favicon.svg
   assets/          ← style.css, main.js, polices auto-hébergées (RGPD), og-image.png
 src/               ← générateur (Python 3) : build.py + content_fr.py + content_en.py
@@ -21,17 +28,17 @@ Pour modifier le site : éditer `src/content_fr.py` / `src/content_en.py` (texte
 
 | Élément | Où | Statut |
 |---|---|---|
-| Email de contact | `SITE.email` + `dist/contact.php` (`$to`, `$from`) | à confirmer |
+| Email de contact | `SITE.email` et `SITE.form_endpoint` (FormSubmit) | à confirmer |
 | Horaires d'appel FR/EN | `SITE.hours_fr`, `SITE.hours_en` | à confirmer |
-| Adresse du siège | `SITE.address_lines` | à compléter |
+| Adresse du siège | `SITE.address_lines` | 14 rue de Champigny, 94370 Sucy-en-Brie (RNE) |
 | WhatsApp (recommandé pour les clients étrangers) | `SITE.whatsapp` (ex. `33612345678`) | vide = bouton masqué |
 | Page LinkedIn | `SITE.linkedin` | vide = lien masqué |
-| Mentions légales : raison sociale, forme, SIREN, RCS, TVA, capital, immatriculation Atout France / carte pro si applicable, hébergeur | `SITE.legal` | à compléter |
+| Mentions légales : carte professionnelle loi Hoguet (n°, CCI), garantie financière, détention de fonds, directeur de la publication | `SITE.legal` | société renseignée ; carte pro et garantie à compléter |
 | CGV : validité du devis, acompte, délai de paiement, annulation, assurance RC pro | `SITE.terms` | valeurs par défaut prudentes, à valider |
 | Mesure d'audience (GA4) | `SITE.analytics_id` | vide = aucun cookie, aucun bandeau |
 | www ou non-www | `SITE.url` + bloc correspondant dans `.htaccess` | non-www par défaut |
 
-CGV, mentions légales et politique de confidentialité sont un socle sérieux (Code de commerce L441-10 / D441-5, RGPD, CNIL) mais doivent être relus par un avocat. Point à vérifier avec lui : le statut d'intermédiaire (immatriculation Atout France pour la vente de séjours / carte professionnelle loi Hoguet pour l'intermédiation locative, selon le modèle exact).
+CGV, mentions légales et politique de confidentialité sont un socle sérieux (Code de commerce L441-10 / D441-5, RGPD, CNIL) mais doivent être relus par un avocat. L'activité déclarée au RNE est une activité immobilière réglementée (loi Hoguet, code APE 6831Z) : les mentions légales doivent indiquer le numéro de carte professionnelle, la CCI qui l'a délivrée, le garant financier et si la société détient des fonds. Si l'activité comprend aussi la vente de séjours (hôtels + transport), vérifier avec l'avocat la nécessité d'une immatriculation Atout France.
 
 ## 3. Affirmations à valider dans les textes
 
@@ -46,7 +53,7 @@ Le copywriting est spécifique, donc engageant. Ces points sont formulés à par
 ## 4. Déploiement Hostinger
 
 1. hPanel → Gestionnaire de fichiers → `public_html` : supprimer l'ancien contenu, téléverser **le contenu** de `dist/` (y compris `.htaccess`, fichier caché).
-2. Vérifier que PHP est activé (version 8.x) ; ouvrir `/contact/`, envoyer un test, vérifier la réception. Si l'email n'arrive pas : créer l'adresse `no-reply@…` dans Hostinger Emails, ou remplacer l'action du formulaire par un service type Formspree.
+2. Activer le formulaire : ouvrir `/contact/` sur le site en ligne, envoyer un premier test. FormSubmit envoie alors un email d'activation à l'adresse de réception : cliquer sur le lien, une seule fois. Les demandes suivantes arrivent directement dans la boîte mail (l'expéditeur est en Reply-To). Facultatif : FormSubmit fournit ensuite un alias `https://formsubmit.co/el/…` à mettre dans `SITE.form_endpoint` pour ne pas exposer l'email dans le code. Si du spam arrive, supprimer la ligne `_captcha` dans `build.py` pour réactiver le captcha de FormSubmit.
 3. SSL : activer le certificat (hPanel → Sécurité → SSL). `.htaccess` force déjà HTTPS.
 4. Si le domaine actuel est sur Squarespace : pointer le DNS vers Hostinger, puis ajouter des redirections 301 des anciennes URL vers les nouvelles dans `.htaccess` (`Redirect 301 /ancienne-page /logement/`). Lister les anciennes URL avant de couper Squarespace.
 

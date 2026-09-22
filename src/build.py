@@ -5,9 +5,9 @@ Usage : python3 build.py   →  dossier ../dist prêt à téléverser sur Hostin
 
 Toutes les informations "à confirmer" sont centralisées dans SITE ci-dessous.
 """
-import os, re, shutil, json, html, datetime
+import os, re, shutil, json, html, datetime, hashlib
 from pathlib import Path
-import content_fr, content_en
+import content_fr, content_en, images
 
 ROOT = Path(__file__).resolve().parent
 DIST = ROOT.parent / "dist"
@@ -22,21 +22,23 @@ SITE = {
     "phone_tel": "+33184161806",
     "whatsapp": "",                                     # ex. "33612345678" (sans +). Vide = bouton masqué.
     "email": "contact@edencorporatemobility.com",       # À CONFIRMER
+    "form_endpoint": "https://formsubmit.co/contact@edencorporatemobility.com",  # FormSubmit : même email ; après activation, remplacer par l'alias https://formsubmit.co/el/xxxx
     "hours_fr": "Lundi–vendredi, 9h–18h (heure de Paris)",   # À CONFIRMER
     "hours_en": "Monday–Friday, 9am–6pm (Paris time, CET)",  # À CONFIRMER
-    "address_lines": ["[Adresse du siège]", "75000 Paris, France"],   # À COMPLÉTER
+    "address_lines": ["14 rue de Champigny", "94370 Sucy-en-Brie, France"],   # siège social (source : RNE / societe.com)
     "linkedin": "",                                     # ex. "https://www.linkedin.com/company/eden-corporate-mobility"
     "analytics_id": "",                                 # ex. "G-XXXXXXXXXX". Vide = aucun cookie, aucun bandeau.
-    "legal": {                                          # Mentions légales — À COMPLÉTER
-        "raison_sociale": "[Raison sociale]",
-        "forme": "[Forme juridique — ex. SAS au capital de 1 000 €]",
-        "siren": "[SIREN]",
-        "rcs": "[RCS Paris 000 000 000]",
-        "tva": "[FR00 000000000]",
-        "directeur": "Flore Hountondji",
-        "immatriculation": "[N° Atout France / carte professionnelle, le cas échéant]",
+    "legal": {                                          # Mentions légales (source : RNE / societe.com, 03/09/2026) — vérifier sur le Kbis
+        "raison_sociale": "EDENEL PATRIMOINE GESTION RESEAUX & SERVICES (nom commercial : Eden Corporate Mobility)",
+        "forme": "société par actions simplifiée au capital de 2 500 €",
+        "siren": "104 632 591",
+        "rcs": "RCS Créteil 104 632 591 — SIRET 104 632 591 00012 — code APE 6831Z",
+        "tva": "FR62 104632591",
+        "directeur": "Ayajénu Hounnou, Président (à confirmer)",
+        "immatriculation": "Carte professionnelle (loi Hoguet) n° [à compléter], délivrée par la CCI [à compléter] — Garantie financière : [organisme, adresse, montant] — [Détention / non-détention de fonds]",
         "host": "Hostinger International Ltd, 61 Lordou Vironos Street, 6023 Larnaca, Chypre — hostinger.fr (à vérifier sur votre contrat)",
     },
+    "stats": [],                                        # ex. [{"n": "120", "suffix": "+", "label_fr": "collaborateurs logés", "label_en": "employees housed"}] — vide = section masquée
     "terms": {                                          # CGV — À CONFIRMER (valeurs par défaut prudentes)
         "devis_validite": "30 jours",
         "acompte": "30 %",
@@ -93,6 +95,10 @@ def find_page(lang, key):
             return p
     raise KeyError(key)
 
+def img_tag(file, lang, cls="", loading="lazy", extra=""):
+    w, h = images.SIZE[file]
+    return f'<img src="/assets/img/{file}" alt="{esc(images.ALT[lang].get(file, ""))}" width="{w}" height="{h}" loading="{loading}"{(" class=" + chr(34) + cls + chr(34)) if cls else ""}{extra}>'
+
 def strip_tags(s):
     return re.sub(r"<[^>]+>", "", s or "")
 
@@ -120,16 +126,18 @@ def r_features(sec, lang):
     for it in sec["items"]:
         icon = ICONS.get(it.get("icon", ""), "")
         link = f'<a class="more" href="{it["href"]}">{it["link"]}</a>' if it.get("href") else ""
-        items += f'<div class="feature">{("<span class=ico>"+icon+"</span>") if icon else ""}<h3>{it["title"]}</h3><p>{it["text"]}</p>{link}</div>'
+        pic = f'<figure class="feature-img">{img_tag(it["img"], lang)}</figure>' if it.get("img") else ""
+        items += f'<div class="feature">{pic}{("<span class=ico>"+icon+"</span>") if icon else ""}<h3>{it["title"]}</h3><p>{it["text"]}</p>{link}</div>'
     intro = f'<p class="lead">{sec["intro"]}</p>' if sec.get("intro") else ""
     return f'<section class="sec"><div class="wrap">{r_heading(sec)}{intro}<div class="features">{items}</div></div></section>'
 
 def r_segments(sec, lang):
     rows = ""
     for it in sec["items"]:
-        rows += f'<li><a href="{it["href"]}"><span class="seg-title">{it["title"]}</span><span class="seg-text">{it["text"]}</span></a></li>'
+        pic = f'<span class="seg-img">{img_tag(it["img"], lang)}</span>' if it.get("img") else ""
+        rows += f'<li><a href="{it["href"]}">{pic}<span class="seg-title">{it["title"]}</span><span class="seg-text">{it["text"]}</span></a></li>'
     intro = f'<p class="lead">{sec["intro"]}</p>' if sec.get("intro") else ""
-    return f'<section class="sec" id="{sec.get("id","")}"><div class="wrap">{r_heading(sec)}{intro}<ul class="segments">{rows}</ul></div></section>'
+    return f'<section class="sec" id="{sec.get("id","")}"><div class="wrap">{r_heading(sec)}{intro}<ul class="segments{" has-img" if any(i.get("img") for i in sec["items"]) else ""}">{rows}</ul></div></section>'
 
 def r_steps(sec, lang):
     rows = ""
@@ -157,10 +165,11 @@ def r_quote(sec, lang):
 
 def r_logos(sec, lang):
     names = "".join(f"<li>{n}</li>" for n in sec["names"])
-    return f'<section class="sec logos"><div class="wrap"><p class="logos-h">{sec["heading"]}</p><ul>{names}</ul></div></section>'
+    return f'<section class="sec logos"><div class="wrap"><p class="logos-h">{sec["heading"]}</p></div><div class="marquee"><ul>{names}</ul><ul aria-hidden="true">{names}</ul></div></section>'
 
 def r_twocol(sec, lang):
-    return f'<section class="sec"><div class="wrap twocol"><div class="col-a"><h2>{sec["heading"]}</h2>{sec.get("aside","")}</div><div class="col-b">{sec["html"]}</div></div></section>'
+    pic = f'<figure class="tc-img">{img_tag(sec["img"], lang)}</figure>' if sec.get("img") else ""
+    return f'<section class="sec"><div class="wrap twocol"><div class="col-a"><h2>{sec["heading"]}</h2>{sec.get("aside","")}{pic}</div><div class="col-b">{sec["html"]}</div></div></section>'
 
 def r_contact(sec, lang, page):
     ui = LANGS[lang]["ui"]
@@ -177,7 +186,7 @@ def r_contact(sec, lang, page):
         else:
             fields += f'<div class="field"><label for="f-{fld["name"]}">{fld["label"]}{req_mark}</label><input id="f-{fld["name"]}" name="{fld["name"]}" type="{fld["type"]}"{req} autocomplete="{fld.get("ac","on")}"></div>'
     return f'''
-<section class="sec"><div class="wrap contact-grid">
+<section class="sec contact-sec" id="contact"><div class="wrap contact-grid">
   <div class="contact-side">
     <h2>{sec["heading"]}</h2>
     <p class="lead">{sec["intro"]}</p>
@@ -187,13 +196,17 @@ def r_contact(sec, lang, page):
     <p><a class="more" href="mailto:{SITE["email"]}">{SITE["email"]}</a></p>
     {sec.get("aside","")}
   </div>
-  <form class="contact-form" method="post" action="/contact.php" id="contact-form" novalidate>
+  <form class="contact-form" method="post" action="{SITE["form_endpoint"]}" id="contact-form" novalidate>
     <h2 class="h3">{f["heading"]}</h2>
     <p class="muted">{f["intro"]}</p>
     <div class="form-ok" id="form-ok" hidden>{f["success"]}</div>
     <div class="form-grid">{fields}</div>
-    <div class="hp" aria-hidden="true"><label>Website<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
-    <input type="hidden" name="lang" value="{lang}">
+    <div class="hp" aria-hidden="true"><label>Website<input type="text" name="_honey" tabindex="-1" autocomplete="off"></label></div>
+    <input type="hidden" name="_subject" value="{f["subject"]}">
+    <input type="hidden" name="_next" value="{abs_url(lang, page["slug"])}?sent=1#contact">
+    <input type="hidden" name="_template" value="table">
+    <input type="hidden" name="_captcha" value="false">
+    <input type="hidden" name="Langue" value="{lang}">
     <p class="muted small">{f["privacy"]}</p>
     <button class="btn btn-primary" type="submit">{f["submit"]}</button>
   </form>
@@ -210,9 +223,23 @@ def r_cta(sec, lang):
   <p class="cta-hours">{ui["hours"]}</p>
 </div></section>'''
 
+def r_media(sec, lang):
+    rows = ""
+    for i, it in enumerate(sec["items"]):
+        rev = " rev" if (i % 2 == 1) != bool(sec.get("start_rev")) else ""
+        rows += f'<div class="media-row{rev}"><figure>{img_tag(it["img"], lang)}</figure><div class="media-text"><h2>{it["heading"]}</h2>{it["html"]}</div></div>'
+    return f'<section class="sec media"><div class="wrap">{rows}</div></section>'
+
+def r_stats(sec, lang):
+    items = [x for x in SITE["stats"] if x.get("n")]
+    if not items:
+        return ""
+    li = "".join(f'<li><span class="stat-n"><span data-count="{x["n"]}">0</span>{x.get("suffix","")}</span><span class="stat-l">{x["label_" + lang]}</span></li>' for x in items)
+    return f'<section class="sec stats"><div class="wrap"><ul>{li}</ul></div></section>'
+
 RENDER = {
     "prose": r_prose, "features": r_features, "segments": r_segments, "steps": r_steps,
-    "team": r_team, "quote": r_quote, "logos": r_logos, "twocol": r_twocol, "cta": r_cta,
+    "team": r_team, "quote": r_quote, "logos": r_logos, "twocol": r_twocol, "cta": r_cta, "media": r_media, "stats": r_stats,
 }
 
 def render_sections(page, lang):
@@ -249,7 +276,7 @@ def r_header(page, lang):
       <ul>{nav}</ul>
       <div class="nav-extra">
         <a class="lang" href="{alt}" lang="{other}" hreflang="{other}">{ui["switch"]}</a>
-        <a class="btn btn-primary head-call" href="tel:{SITE["phone_tel"]}">{ICONS["phone"]}<span>{SITE["phone_display"]}</span></a>
+        <a class="btn btn-contact head-contact" href="#contact">{ICONS["mail"]}<span>{ui["contact"]}</span></a>
       </div>
     </nav>
   </div>
@@ -283,28 +310,36 @@ def r_footer(page, lang):
 <div class="call-bar" role="region" aria-label="{ui["call"]}">
   <a class="btn btn-primary" href="tel:{SITE["phone_tel"]}">{ICONS["phone"]}{ui["call"]}</a>
   {"" if not SITE["whatsapp"] else f'<a class="btn btn-ghost" href="https://wa.me/{SITE["whatsapp"]}" rel="noopener">{ICONS["whatsapp"]}WhatsApp</a>'}
-  <a class="btn btn-ghost" href="{url_for(lang, find_page(lang,"contact")["slug"])}">{ICONS["mail"]}{ui["write"]}</a>
+  <a class="btn btn-ghost" href="#contact">{ICONS["mail"]}{ui["write"]}</a>
 </div>'''
 
 def r_hero(page, lang):
     ui = LANGS[lang]["ui"]
     ctc = find_page(lang, "contact")
     h = page["hero"]
+    slides = "".join(f'<div class="slide{" is-active" if i == 0 else ""}">{img_tag(sl, lang, loading=("eager" if i == 0 else "lazy"), extra=(" fetchpriority=\"high\"" if i == 0 else ""))}</div>' for i, sl in enumerate(h["slides"]))
+    dots = "".join(f'<button type="button" data-slide="{i}" aria-label="{ui["slide"]} {i + 1}"{" aria-current=\"true\"" if i == 0 else ""}></button>' for i in range(len(h["slides"])))
+    pills = "".join(f'<li><a href="{href}">{ICONS[ic]}<span>{lab}</span></a></li>' for ic, lab, href in h["pills"])
     return f'''
-<section class="hero"><div class="wrap hero-grid">
-  <div class="hero-copy">
-    <h1>{page["h1"]}</h1>
-    <p class="lead">{h["lead"]}</p>
-    <p class="btn-row"><a class="btn btn-primary" href="tel:{SITE["phone_tel"]}">{ICONS["phone"]}{ui["call_number"]}</a><a class="btn btn-ghost" href="{url_for(lang, ctc["slug"])}">{ui["describe"]}</a></p>
-    <p class="hero-note">{h["note"]}</p>
+<section class="hero">
+  <div class="hero-slides" id="hero-slides" aria-hidden="true">{slides}</div>
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="kicker">{h["kicker"]}</p>
+      <h1>{page["h1"]}</h1>
+      <p class="lead">{h["lead"]}</p>
+      <p class="btn-row"><a class="btn btn-light" href="tel:{SITE["phone_tel"]}">{ICONS["phone"]}{ui["call_number"]}</a><a class="btn btn-outline" href="#contact">{ui["describe"]}</a></p>
+      <ul class="hero-pills">{pills}</ul>
+    </div>
+    <aside class="call-card" aria-labelledby="cc-h">
+      <p id="cc-h" class="cc-h">{h["card_title"]}</p>
+      <a class="cc-phone" href="tel:{SITE["phone_tel"]}">{SITE["phone_display"]}</a>
+      <p class="cc-hours">{ui["hours"]}</p>
+      <ul class="cc-list">{"".join(f"<li>{x}</li>" for x in h["card_points"])}</ul>
+    </aside>
   </div>
-  <aside class="call-card" aria-labelledby="cc-h">
-    <p id="cc-h" class="cc-h">{h["card_title"]}</p>
-    <a class="cc-phone" href="tel:{SITE["phone_tel"]}">{SITE["phone_display"]}</a>
-    <p class="cc-hours">{ui["hours"]}</p>
-    <ul class="cc-list">{"".join(f"<li>{x}</li>" for x in h["card_points"])}</ul>
-  </aside>
-</div></section>'''
+  <div class="wrap hero-foot"><div class="hero-dots" id="hero-dots">{dots}</div><p class="hero-note">{h["note"]}</p></div>
+</section>'''
 
 def r_pagehead(page, lang):
     ui = LANGS[lang]["ui"]
@@ -315,6 +350,9 @@ def r_pagehead(page, lang):
         crumbs += f'<li><a href="{url_for(lang, par["slug"])}">{par["nav"]}</a></li>'
     crumbs += f'<li aria-current="page">{page["nav"]}</li></ol></nav>'
     lead = f'<p class="lead">{page["lead"]}</p>' if page.get("lead") else ""
+    if page.get("image"):
+        photo = f'<div class="ph-img" aria-hidden="true">{img_tag(page["image"], lang, loading="eager", extra=" fetchpriority=\"high\"")}</div>'
+        return f'<div class="page-head has-photo">{photo}<div class="wrap narrow">{crumbs}<h1>{page["h1"]}</h1>{lead}</div></div>'
     return f'<div class="page-head"><div class="wrap narrow">{crumbs}<h1>{page["h1"]}</h1>{lead}</div></div>'
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -331,7 +369,8 @@ def jsonld(page, lang):
         "image": SITE["url"] + "/assets/og-image.png",
         "telephone": SITE["phone_tel"],
         "email": SITE["email"],
-        "address": {"@type": "PostalAddress", "addressLocality": "Paris", "addressRegion": "Île-de-France", "postalCode": "75000", "addressCountry": "FR"},
+        "address": {"@type": "PostalAddress", "streetAddress": SITE["address_lines"][0], "addressLocality": "Sucy-en-Brie", "addressRegion": "Île-de-France", "postalCode": "94370", "addressCountry": "FR"},
+        "legalName": SITE["legal"]["raison_sociale"].split(" (")[0], "vatID": SITE["legal"]["tva"].replace(" ", ""),
         "areaServed": [{"@type": "AdministrativeArea", "name": "Île-de-France"}, {"@type": "City", "name": "Paris"}],
         "priceRange": "$$$",
         "contactPoint": [{"@type": "ContactPoint", "telephone": SITE["phone_tel"], "contactType": "sales", "availableLanguage": ["fr", "en"], "areaServed": "FR"}],
@@ -367,16 +406,24 @@ def jsonld(page, lang):
 # ─────────────────────────────────────────────────────────────────────────────
 # DOCUMENT
 # ─────────────────────────────────────────────────────────────────────────────
+def asset_v(name):
+    """Empreinte courte du fichier, ajoutée en ?v= pour forcer le rechargement après chaque modification."""
+    return hashlib.md5((ROOT / "assets" / name).read_bytes()).hexdigest()[:8]
+
 def render_page(page, lang):
     ui = LANGS[lang]["ui"]
+    css_v, js_v = asset_v("style.css"), asset_v("main.js")
     other = "en" if lang == "fr" else "fr"
     canonical = abs_url(lang, page["slug"])
     alt_url = abs_url(other, page["alt"])
     fr_url, en_url = (canonical, alt_url) if lang == "fr" else (alt_url, canonical)
     body = r_hero(page, lang) if page.get("hero") else r_pagehead(page, lang)
-    body += render_sections(page, lang)
-    if page.get("cta", True) and page["key"] != "contact":
+    body += render_sections(page, lang).replace('<section class="sec', '<section data-reveal class="sec')
+    if page.get("cta", False):
         body += r_cta(ui["cta_default"], lang)
+    if page["key"] != "contact":
+        csec = next(sec for sec in find_page(lang, "contact")["sections"] if sec["type"] == "contact")
+        body += r_contact(csec, lang, page).replace('<section class="sec', '<section data-reveal class="sec')
     noindex = '<meta name="robots" content="noindex,follow">' if page.get("noindex") else '<meta name="robots" content="index,follow,max-image-preview:large">'
     ga = SITE["analytics_id"]
     return f'''<!DOCTYPE html>
@@ -406,7 +453,7 @@ def render_page(page, lang):
 <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
 <link rel="preload" href="/assets/fonts/newsreader-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/assets/fonts/instrument-sans-var.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/style.css?v={css_v}">
 <script type="application/ld+json">{jsonld(page, lang)}</script>
 </head>
 <body class="{"home" if page.get("hero") else "inner"}">
@@ -419,7 +466,7 @@ def render_page(page, lang):
   <p>{ui["consent_text"]} <a href="{url_for(lang, find_page(lang,"privacy")["slug"])}">{ui["consent_more"]}</a></p>
   <p class="btn-row"><button class="btn btn-ghost" data-consent="deny">{ui["consent_deny"]}</button><button class="btn btn-primary" data-consent="allow">{ui["consent_allow"]}</button></p>
 </div>
-<script src="/assets/main.js" defer></script>
+<script src="/assets/main.js?v={js_v}" defer></script>
 </body>
 </html>'''
 
@@ -443,7 +490,6 @@ def sitemap():
 
 ROBOTS = """User-agent: *
 Allow: /
-Disallow: /contact.php
 Sitemap: {url}/sitemap.xml
 """
 
@@ -495,7 +541,7 @@ def build():
         shutil.rmtree(DIST)
     DIST.mkdir(parents=True)
     shutil.copytree(ROOT / "assets", DIST / "assets")
-    for extra in ["favicon.svg", "contact.php", "404.html", "README.md"]:
+    for extra in ["favicon.svg", "404.html", "README.md"]:
         src = ROOT / extra
         if src.exists():
             shutil.copy(src, DIST / extra)
