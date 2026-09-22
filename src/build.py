@@ -541,7 +541,7 @@ def build():
         shutil.rmtree(DIST)
     DIST.mkdir(parents=True)
     shutil.copytree(ROOT / "assets", DIST / "assets")
-    for extra in ["favicon.svg", "404.html", "README.md"]:
+    for extra in ["favicon.svg", "404.html", "README.md", "CNAME", ".nojekyll"]:
         src = ROOT / extra
         if src.exists():
             shutil.copy(src, DIST / extra)
